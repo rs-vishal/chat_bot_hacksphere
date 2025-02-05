@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 
 const AddProductModal = ({ closeModal }) => {
@@ -8,10 +8,37 @@ const AddProductModal = ({ closeModal }) => {
     pricePerUnit: '',
     availableQuantity: '',
     location: '',
-    freshnessLevel: '',
     harvestedDate: '',
     picture: null
   });
+
+  const [categoryOptions, setCategoryOptions] = useState([]);
+  const [nameOptions, setNameOptions] = useState([]);
+
+  const vegetableNames = [
+    "Carrot", "Broccoli", "Spinach", "Cauliflower", "Bell Pepper", 
+    "Zucchini", "Kale", "Eggplant", "Cucumber", "Sweet Potato"
+  ];
+
+  const fruitNames = [
+    "Apple", "Banana", "Mango", "Orange", "Pineapple", 
+    "Strawberry", "Grapes", "Kiwi", "Watermelon", "Pear"
+  ];
+
+  const dairyNames = [
+    "Milk", "Cheese", "Yogurt", "Butter", "Cream", 
+    "Cottage Cheese", "Sour Cream", "Ice Cream", "Ghee", "Buttermilk"
+  ];
+
+  useEffect(() => {
+    if (productDetails.category === 'vegetable') {
+      setNameOptions(vegetableNames);
+    } else if (productDetails.category === 'fruit') {
+      setNameOptions(fruitNames);
+    } else if (productDetails.category === 'dairy') {
+      setNameOptions(dairyNames);
+    }
+  }, [productDetails.category]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,6 +48,11 @@ const AddProductModal = ({ closeModal }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setProductDetails({ ...productDetails, picture: file });
+  };
+
+  const handleCategoryChange = (e) => {
+    const { value } = e.target;
+    setProductDetails({ ...productDetails, category: value, name: '' });
   };
 
   const handleSubmit = (e) => {
@@ -40,27 +72,40 @@ const AddProductModal = ({ closeModal }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col">
+              <label className="font-semibold mb-2">Category</label>
+              <select
+                name="category"
+                value={productDetails.category}
+                onChange={handleCategoryChange}
+                className="border p-2 rounded-lg"
+                required
+              >
+                <option value="">Select Category</option>
+                <option value="vegetable">Vegetable</option>
+                <option value="fruit">Fruit</option>
+                <option value="dairy">Dairy</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col">
               <label className="font-semibold mb-2">Product Name</label>
-              <input
-                type="text"
+              <select
                 name="name"
                 value={productDetails.name}
                 onChange={handleChange}
                 className="border p-2 rounded-lg"
                 required
-              />
+                disabled={!productDetails.category}
+              >
+                <option value="">Select Product</option>
+                {nameOptions.map((name, index) => (
+                  <option key={index} value={name}>
+                    {name}
+                  </option>
+                ))}
+              </select>
             </div>
-            <div className="flex flex-col">
-              <label className="font-semibold mb-2">Category</label>
-              <input
-                type="text"
-                name="category"
-                value={productDetails.category}
-                onChange={handleChange}
-                className="border p-2 rounded-lg"
-                required
-              />
-            </div>
+
             <div className="flex flex-col">
               <label className="font-semibold mb-2">Price per Unit</label>
               <input
@@ -89,17 +134,6 @@ const AddProductModal = ({ closeModal }) => {
                 type="text"
                 name="location"
                 value={productDetails.location}
-                onChange={handleChange}
-                className="border p-2 rounded-lg"
-                required
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="font-semibold mb-2">Freshness Level</label>
-              <input
-                type="text"
-                name="freshnessLevel"
-                value={productDetails.freshnessLevel}
                 onChange={handleChange}
                 className="border p-2 rounded-lg"
                 required

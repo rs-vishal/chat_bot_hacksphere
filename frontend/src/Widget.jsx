@@ -3,17 +3,20 @@ import axios from 'axios';
 import { FaPaperPlane } from 'react-icons/fa';
 import { VscRobot } from "react-icons/vsc";
 import { AiOutlineSearch, AiOutlineShoppingCart, AiOutlineDollar, AiOutlinePlusCircle, AiOutlineEdit, AiOutlineEye } from 'react-icons/ai';
-import AddProductModal from './Addproducts';
+import AddProductModal from './components/Addproducts';
+import UpdateProductModal from './components/Updateproduct';
 
 function Widget() {
   const [click, setClick] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [userRole, setUserRole] = useState('customer');
-  const [modalOpen, setModalOpen] = useState(false); // Manage modal state
+  const [modalOpen, setModalOpen] = useState(false); 
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);  // Track Update Modal
+  const [productToUpdate, setProductToUpdate] = useState(null);  // Product details for update
 
   useEffect(() => {
-    const role = 'farmer';  // For testing purposes, set the role as 'farmer'
+    const role = 'farmer';  
     setUserRole(role);
   }, []);
 
@@ -40,11 +43,26 @@ function Widget() {
   };
 
   const openAppProduct = () => {
-    setModalOpen(true); // Open the modal
+    setModalOpen(true); // Open the modal for adding a product
   };
 
   const closeAppProduct = () => {
-    setModalOpen(false); // Close the modal
+    setModalOpen(false); // Close the add product modal
+  };
+
+  const openUpdateProductModal = () => {
+    // Set example product details to update
+    setProductToUpdate({
+      id: '1234',
+      availableQuantity: '50',
+      pricePerUnit: '20',
+      harvestedDate: '2024-01-01',
+    });
+    setUpdateModalOpen(true);  // Open the update product modal
+  };
+
+  const closeUpdateProductModal = () => {
+    setUpdateModalOpen(false);  // Close the update product modal
   };
 
   return (
@@ -65,7 +83,7 @@ function Widget() {
                 <button onClick={openAppProduct} className="bg-blue-500 text-white py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700">
                   <AiOutlinePlusCircle size={20} /> Add Product
                 </button>
-                <button className="bg-blue-500 text-white py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700">
+                <button onClick={openUpdateProductModal} className="bg-blue-500 text-white py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700">
                   <AiOutlineEdit size={20} /> Update Product Details
                 </button>
                 <button className="bg-blue-500 text-white py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700">
@@ -104,8 +122,16 @@ function Widget() {
         </div>
       )}
 
-      {/* Render modal when modalOpen is true */}
+      {/* Render modal for adding product */}
       {modalOpen && <AddProductModal closeModal={closeAppProduct} />}
+
+      {/* Render modal for updating product */}
+      {updateModalOpen && productToUpdate && (
+        <UpdateProductModal 
+          closeModal={closeUpdateProductModal} 
+          initialProductDetails={productToUpdate} 
+        />
+      )}
     </div>
   );
 }

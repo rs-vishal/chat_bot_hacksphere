@@ -1,4 +1,3 @@
-// src/ChatWidget.js
 import React, { useState } from 'react';
 
 function Widget() {
