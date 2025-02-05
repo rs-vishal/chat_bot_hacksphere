@@ -3,7 +3,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
-const db = require('./db'); // assuming db.js is set up for database queries
+const db = require('./db'); 
 
 const app = express();
 app.use(cors());
@@ -63,11 +63,23 @@ app.post('/login', async (req, res) => {
         // Create JWT token
         const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        res.status(200).json({ message: 'Login successful', token });
+        // Return user details along with token
+        const userDetails = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            location: user.location,
+            phone: user.phone,
+            token: token
+        };
+
+        res.status(200).json({ message: 'Login successful', userDetails });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 // Add Product Route
 app.post('/add_product', async (req, res) => {
