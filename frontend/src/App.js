@@ -4,9 +4,10 @@ import Widget from './components/Widget';
 import Register from './components/Register';
 import Home from './components/Home';
 import Login from './components/Login';
-
+import { AuthProvider } from './context/context';
 function App() {
   return (
+    <AuthProvider>
     <Router>
       {/* <nav>
         <Link to="/">Home</Link> 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/chat" element={<Widget/>}/>
       </Routes>
     </Router>
+    </AuthProvider>
   );
 }
 

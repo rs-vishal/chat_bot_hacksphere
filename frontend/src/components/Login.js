@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Authcontext } from '../context/context';
 import { Link } from "react-router-dom";
 
 const Login = () => {
@@ -8,6 +10,7 @@ const Login = () => {
         email: '',
         password: '',
     });
+    const {setemail,setrole}=useContext(Authcontext);
 
     const [errors, setErrors] = useState({});
 
@@ -32,7 +35,9 @@ const Login = () => {
         try {
             console.log('Logging in:', formData);
             // Replace with API call to authenticate user
-            // await axios.post('/api/login', formData);
+            var respone=await axios.post('localhost:5000/login', formData);
+            setemail(respone.email);
+            setrole(Response.role);
             navigate('/chat'); // Redirect to /chat after login
         } catch (error) {
             console.error('Login error:', error);

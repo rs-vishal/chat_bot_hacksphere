@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { FaPaperPlane } from 'react-icons/fa';
 import { VscRobot } from "react-icons/vsc";
 import { AiOutlineSearch, AiOutlineShoppingCart, AiOutlineDollar, AiOutlinePlusCircle, AiOutlineEdit, AiOutlineEye } from 'react-icons/ai';
 import AddProductModal from './Addproducts';
 import UpdateProductModal from './Updateproduct';
-
+import { Authcontext } from '../context/context';
 
 function Widget() {
   const [click, setClick] = useState(false);
@@ -15,9 +15,9 @@ function Widget() {
   const [modalOpen, setModalOpen] = useState(false); 
   const [updateModalOpen, setUpdateModalOpen] = useState(false);  // Track Update Modal
   const [productToUpdate, setProductToUpdate] = useState(null);  // Product details for update
-
-  useEffect(() => {
-    const role = 'farmer';  
+  const {Role}=useContext(Authcontext);
+  const role=Role;
+  useEffect(() => { 
     setUserRole(role);
   }, []);
 
