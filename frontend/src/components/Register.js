@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import axios from 'axios';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -38,6 +39,7 @@ const Register = () => {
 
         try {
             console.log('Registering:', formData);
+            const response = await axios.post('http://localhost:5000/register', formData);
             navigate('/login'); // Redirect to login after successful registration
         } catch (error) {
             console.error('Registration error:', error);
@@ -84,8 +86,8 @@ const Register = () => {
                             className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
                         >
                             <option value="None">Select Role</option>
-                            <option value="Farmer">Farmer</option>
-                            <option value="Buyer">Buyer</option>
+                            <option value="Farmer">farmer</option>
+                            <option value="Buyer">buyer</option>
                         </select>
                     </div>
 
